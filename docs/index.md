@@ -43,6 +43,7 @@ Open-Source Dataset for Objects that need to be recognized during the dynamic di
 | Formula Electric Belgium | Color Images | Darknet YOLO Format | 600 | 4874 |
 | STUBA Green Team | Color Images | Darknet YOLO Format | 1996 | 3346 |
 | FaSTTUBe | Color Images | Darknet YOLO Format | 605 | 2196 |
+| High Speed Karlsruhe | Color Images | Darknet YOLO Format | 600 | 4864 |
 |...|...|...|...|...|
 
 ### Annotation Types
@@ -285,6 +286,10 @@ More information can be found [here](http://labelme.csail.mit.edu/Release3.0/)
 * [FaSTTUBe](https://fasttube.de)
 
 <a href="https://fasttube.de"><img src="./img/fasttube_logo.png" alt="FaSTTUBe" width="400"/></a>
+
+* [High Speed Karlsruhe](https://www.highspeed-karlsruhe.de)
+
+<a href="https://www.highspeed-karlsruhe.de"><img src="./img/HSK.png" alt="HSK" width="400"/></a>
 
 *...
 

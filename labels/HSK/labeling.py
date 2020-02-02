@@ -12,7 +12,9 @@
 from __future__ import division
 from tkinter import *
 import tkinter.simpledialog
+from pathlib import Path
 from PIL import Image, ImageTk
+import shutil
 import os
 import glob
 import random
@@ -24,7 +26,16 @@ COLORS = ['blue', 'yellow', 'pink', 'cyan', 'green', 'black']
 RENDERING_COLOR = 'red'
 
 IMG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Images')
+Path(IMG_PATH).mkdir(parents=True, exist_ok=True)
+
 LABEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Labels')
+Path(LABEL_PATH).mkdir(parents=True, exist_ok=True)
+
+FLAG_IMG_PATH = os.path.join(IMG_PATH, 'flagged')
+Path(FLAG_IMG_PATH).mkdir(parents=True, exist_ok=True)
+
+FLAG_LABEL_PATH = os.path.join(LABEL_PATH, 'flagged')
+Path(FLAG_LABEL_PATH).mkdir(parents=True, exist_ok=True)
 
 
 class BoundingBox(object):
@@ -117,9 +128,10 @@ class LabelTool:
         self.mainPanel.bind("<Button-1>", self.mouseClick)
         self.mainPanel.bind("<Motion>", self.mouseMove)
         self.parent.bind("<Escape>", self.cancelBBox)  # press <Espace> to cancel current bbox
-        self.parent.bind("s", self.cancelBBox)
         self.parent.bind("a", self.prevImage)  # press 'a' to go backforward
         self.parent.bind("d", self.nextImage)  # press 'd' to go forward
+        self.parent.bind("<Left>", self.prevImage)  # press 'left' to go backforward
+        self.parent.bind("<Right>", self.nextImage)  # press 'right' to go forward
 
         self.mainPanel.grid(row=1, column=1, rowspan=4, sticky=W + N)
 
@@ -155,6 +167,8 @@ class LabelTool:
         self.idxEntry.pack(side=LEFT)
         self.goBtn = Button(self.ctrPanel, text='Go', command=self.gotoImage)
         self.goBtn.pack(side=LEFT)
+        self.btnFlag = Button(self.ctrPanel, text='Flag image', command=self.flagImg)
+        self.btnFlag.pack(side=LEFT, padx=15, pady=3)
 
         # display mouse position
         self.disp = Label(self.ctrPanel, text='')
@@ -171,6 +185,9 @@ class LabelTool:
         # get image list
         self.imageDir = os.path.join(IMG_PATH, '%s' % self.category)
         self.imageDir = self.imageDir.replace("\\", "/")
+
+        self.labelDir = os.path.join(LABEL_PATH, '%s' % self.category)
+        self.labelDir = self.labelDir.replace("\\", "/")
 
         self.imageList = [name for name in os.listdir(self.imageDir) if name.endswith(".jpg")]
 
@@ -308,6 +325,22 @@ class LabelTool:
             self.mainPanel.delete(self.bboxList[idx].id)
         self.listbox.delete(0, len(self.bboxList))
         self.bboxList = []
+
+    def flagImg(self):
+        imagepath = os.path.join(self.imageDir, self.imagename + ".jpg")
+        imagepath = imagepath.replace("\\", "/")
+
+        labelpath = os.path.join(self.labelDir, self.imagename + ".txt")
+        labelpath = labelpath.replace("\\", "/")
+
+        new_imgpath = os.path.join(FLAG_IMG_PATH, self.imagename + ".jpg")
+        new_imgpath = new_imgpath.replace("\\", "/")
+
+        new_labelpath = os.path.join(FLAG_LABEL_PATH, self.imagename + ".txt")
+        new_labelpath = new_labelpath.replace("\\", "/")
+
+        shutil.copyfile(imagepath, new_imgpath)
+        shutil.copyfile(labelpath, new_labelpath)
 
     def prevImage(self, event=None):
         self.saveImage()

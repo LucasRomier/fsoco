@@ -1,0 +1,2 @@
+Only cones with a height of more than roughly 20 Pixel were labeled in this data set.
+The background cones of overlapping cones have been ignored for labeling.
